@@ -21,8 +21,10 @@ boards = trello.organizations.get_board(config['org_name'])
 message = []
 for board in boards:
     bName = board['name']
+    if bName == "Medifor":
+        print json.dumps(board, indent=2)
     lastAct = board['dateLastActivity']
-    if lastAct is not None:
+    if lastAct is not None and board['closed'] is not True:
         lastActObj = datetime.strptime(lastAct, "%Y-%m-%dT%H:%M:%S.%fZ")
         test = lastActObj.strftime("%Y-%m-%d")
         if runDateObj - timedelta(days = inactivityThreshold) > lastActObj:
@@ -38,5 +40,9 @@ slack_payload = {
     "username": config['username']
 }
 # TODO: add error handling here
-r = requests.post(config['slack_webhook_url'], data = json.dumps(slack_payload))
-print slack_payload
+dow = datetime.today().weekday() # Monday is zero
+if dow < 5: # weekday
+    r = requests.post(config['slack_webhook_url'], data = json.dumps(slack_payload))
+    print slack_payload
+else:
+    print "Not sending to slack because it's the weekend."
