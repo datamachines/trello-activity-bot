@@ -21,8 +21,6 @@ boards = trello.organizations.get_board(config['org_name'])
 message = []
 for board in boards:
     bName = board['name']
-    if bName == "Medifor":
-        print json.dumps(board, indent=2)
     lastAct = board['dateLastActivity']
     if lastAct is not None and board['closed'] is not True:
         lastActObj = datetime.strptime(lastAct, "%Y-%m-%dT%H:%M:%S.%fZ")
