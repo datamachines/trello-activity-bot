@@ -41,6 +41,6 @@ slack_payload = {
 dow = datetime.today().weekday() # Monday is zero
 if dow < 5: # weekday
     r = requests.post(config['slack_webhook_url'], data = json.dumps(slack_payload))
-    print slack_payload
+    print json.dumps(slack_payload, indent=2)
 else:
     print "Not sending to slack because it's the weekend."
